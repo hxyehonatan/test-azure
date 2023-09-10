@@ -279,7 +279,7 @@
         "autoUpgradeMinorVersion": true,
         "settings": {
           "fileUris": [
-            "[uri(parameters('_artifactsLocation'), concat('scripts/python-proxy-install-ubuntu.sh', parameters('_artifactsLocationSasToken')))]"
+            "[uri(parameters('_artifactsLocation'), concat('scripts/init-script.sh', parameters('_artifactsLocationSasToken')))]"
           ],
           "commandToExecute": "sh python-proxy-install-ubuntu.sh"
         }
