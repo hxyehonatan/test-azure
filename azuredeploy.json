@@ -245,7 +245,7 @@
     },
     {
       "type": "Microsoft.Compute/virtualMachines/extensions",
-      "name": "[concat(parameters('vmName'),'/installPythonProxy')]",
+      "name": "[concat(parameters('vmName'),'/HakaInstallation')]",
       "apiVersion": "2020-12-01",
       "location": "[parameters('location')]",
       "dependsOn": [
@@ -260,7 +260,7 @@
           "fileUris": [
             "[uri(parameters('_artifactsLocation'), concat('scripts/init-script.sh', parameters('_artifactsLocationSasToken')))]"
           ],
-          "commandToExecute": "sh python-proxy-install-ubuntu.sh"
+          "commandToExecute": "sh init-script.sh"
         }
       }
     }
