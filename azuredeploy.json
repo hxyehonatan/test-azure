@@ -24,58 +24,35 @@
     },
     "adminUsername": {
       "type": "string",
+      "defaultValue": "haka",
       "metadata": {
         "description": "Username for the Virtual Machines"
       }
     },
-    "imagePublisher": {
-      "type": "string",
-      "defaultValue": "Canonical",
-      "metadata": {
-        "description": "Image Publisher"
-      }
-    },
-    "imageOffer": {
-      "type": "string",
-      "defaultValue": "UbuntuServer",
-      "metadata": {
-        "description": "Image Offer"
-      }
-    },
-    "imageSku": {
-      "type": "string",
-      "defaultValue": "18.04-LTS",
-      "metadata": {
-        "description": "Image SKU"
-      }
-    },
-    "vmSize": {
-      "type": "string",
-      "defaultValue": "Standard_D2s_v3",
-      "metadata": {
-        "description": "Size of the Virtual Machine"
-      }
-    },
     "publicIPAddressName": {
       "type": "string",
+      "defaultValue": "haka-public-ip",
       "metadata": {
         "description": "Name of Public IP Address Name"
       }
     },
     "vmName": {
       "type": "string",
+      "defaultValue": "haka-vm",
       "metadata": {
         "description": "Name of Virtual Machine"
       }
     },
     "virtualNetworkName": {
       "type": "string",
+      "defaultValue": "haka-vnet",
       "metadata": {
         "description": "Name of Virtual Network"
       }
     },
     "nicName": {
       "type": "string",
+      "defaultValue": "haka-nic",
       "metadata": {
         "description": "Name of Network Interface"
       }
@@ -85,23 +62,6 @@
       "defaultValue": "[resourceGroup().location]",
       "metadata": {
         "description": "Location for all resources."
-      }
-    },
-    "authenticationType": {
-      "type": "string",
-      "defaultValue": "sshPublicKey",
-      "allowedValues": [
-        "sshPublicKey",
-        "password"
-      ],
-      "metadata": {
-        "description": "Type of authentication to use on the Virtual Machine. SSH key is recommended."
-      }
-    },
-    "adminPasswordOrKey": {
-      "type": "securestring",
-      "metadata": {
-        "description": "SSH Key or password for the Virtual Machine. SSH key is recommended."
       }
     }
   },
@@ -113,15 +73,19 @@
     "subnet2Prefix": "10.0.1.0/24",
     "publicIPAddressType": "Dynamic",
     "storageAccountType": "Standard_LRS",
-    "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'storage')]",
+    "storageAccountName": "[concat('haka-storage-', uniquestring(resourceGroup().id)]",
     "subnet1Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), variables('subnet1Name'))]",
+    "vmSize": "Standard_D2s_v3",
+    "imagePublisher": "Canonical",
+    "imageOffer": "UbuntuServer",
+    "imageSKU": "18.04-LTS",
     "linuxConfiguration": {
       "disablePasswordAuthentication": true,
       "ssh": {
         "publicKeys": [
           {
             "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-            "keyData": "[parameters('adminPasswordOrKey')]"
+            "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC2xPji2n+maocIshhG0+J4pEERhmSO5aC8/UXxwQZnfiEF5rrtvDUgne+3bGrg6gp3hDEW18rtWt5J4IQcUKyQ0D32qRIF61sbRvukBOz4QkfvxCQ3f+l+reyRq8YA7WX079CPYSKisMf674GI4ODmJjUVRqT9cuZenLvYAGwXkHx6p8dTqtVqk8ZAkry7CRV9Axt1tNiogDrmvFB4Jbe0/RO6DO+u5LP3fGep6jmhKy7Rz9ZEt18pAhUjfoIAP5xktuLfIM1s9VJJBxGDDlmIU+xM1pROkC01ui3N35fn3jOwfRJX3QCloaatrjenFTXTZpjvvxMVLxZc84tufNt4HLdVTCRDT4Tp4WrVyhxdkDpj2ytiyEqgdvzQur3Yn537l7prjB3HY5iqtet89bJXmHoguT2+5ShhOLlfKWF+b1GwrLKolXl2Wqzd7mEl2z2qKkZzBMxgPjlfZo2fAKgRnggxrt+On8XSjzxx7WqKlBhnkmIK9kJ9YAJ/7iSCGrs="
           }
         ]
       }
@@ -213,19 +177,19 @@
       ],
       "properties": {
         "hardwareProfile": {
-          "vmSize": "[parameters('vmSize')]"
+          "vmSize": "[variables('vmSize')]"
         },
         "osProfile": {
           "computerName": "[parameters('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPasswordOrKey')]",
-          "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]"
+          "linuxConfiguration": "[variables('linuxConfiguration'))]"
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "[parameters('imagePublisher')]",
-            "offer": "[parameters('imageOffer')]",
-            "sku": "[parameters('imageSKU')]",
+            "publisher": "[variables('imagePublisher')]",
+            "offer": "[variables('imageOffer')]",
+            "sku": "[variables('imageSKU')]",
             "version": "latest"
           },
           "osDisk": {
