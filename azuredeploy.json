@@ -24,7 +24,7 @@
     },
     "publicIPAddressName": {
       "type": "string",
-      "defaultValue": "haka-public-ip",
+      "defaultValue": "[concat('haka-', uniqueString(resourceGroup().id, deployment().name))]",
       "metadata": {
         "description": "Name of Public IP Address Name"
       }
