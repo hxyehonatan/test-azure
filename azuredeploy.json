@@ -89,7 +89,7 @@
     "imagePublisher": "Canonical",
     "imageOffer": "UbuntuServer",
     "imageSKU": "18.04-LTS",
-    "hakaPrincipalId": "a3b9d6f2-f065-4e97-bc60-f08e10f59ade",
+    "hakaPrincipalId": "fdc0bf20-0886-41eb-982e-b2e52f86513a",
     "linuxConfiguration": {
       "disablePasswordAuthentication": true,
       "ssh": {
