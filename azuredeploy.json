@@ -63,6 +63,23 @@
       "metadata": {
         "description": "Location for all resources."
       }
+    },
+    "authenticationType": {
+      "type": "string",
+      "defaultValue": "sshPublicKey",
+      "allowedValues": [
+        "sshPublicKey",
+        "password"
+      ],
+      "metadata": {
+        "description": "Type of authentication to use on the Virtual Machine. SSH key is recommended."
+      }
+    },
+    "adminPasswordOrKey": {
+      "type": "securestring",
+      "metadata": {
+        "description": "SSH Key or password for the Virtual Machine. SSH key is recommended."
+      }
     }
   },
   "variables": {
@@ -85,7 +102,7 @@
         "publicKeys": [
           {
             "path": "[concat('/home/', parameters('adminUsername'), '/.ssh/authorized_keys')]",
-            "keyData": "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC2xPji2n+maocIshhG0+J4pEERhmSO5aC8/UXxwQZnfiEF5rrtvDUgne+3bGrg6gp3hDEW18rtWt5J4IQcUKyQ0D32qRIF61sbRvukBOz4QkfvxCQ3f+l+reyRq8YA7WX079CPYSKisMf674GI4ODmJjUVRqT9cuZenLvYAGwXkHx6p8dTqtVqk8ZAkry7CRV9Axt1tNiogDrmvFB4Jbe0/RO6DO+u5LP3fGep6jmhKy7Rz9ZEt18pAhUjfoIAP5xktuLfIM1s9VJJBxGDDlmIU+xM1pROkC01ui3N35fn3jOwfRJX3QCloaatrjenFTXTZpjvvxMVLxZc84tufNt4HLdVTCRDT4Tp4WrVyhxdkDpj2ytiyEqgdvzQur3Yn537l7prjB3HY5iqtet89bJXmHoguT2+5ShhOLlfKWF+b1GwrLKolXl2Wqzd7mEl2z2qKkZzBMxgPjlfZo2fAKgRnggxrt+On8XSjzxx7WqKlBhnkmIK9kJ9YAJ/7iSCGrs="
+            "keyData": "[parameters('adminPasswordOrKey')]"
           }
         ]
       }
@@ -183,7 +200,7 @@
           "computerName": "[parameters('vmName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPasswordOrKey')]",
-          "linuxConfiguration": "[variables('linuxConfiguration')]"
+          "linuxConfiguration": "[if(equals(parameters('authenticationType'), 'password'), json('null'), variables('linuxConfiguration'))]"
         },
         "storageProfile": {
           "imageReference": {
