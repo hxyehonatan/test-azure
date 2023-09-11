@@ -73,7 +73,7 @@
     "subnet2Prefix": "10.0.1.0/24",
     "publicIPAddressType": "Dynamic",
     "storageAccountType": "Standard_LRS",
-    "storageAccountName": "[concat('storage', uniquestring(resourceGroup().id)]",
+    "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'storage')]",
     "subnet1Ref": "[resourceId('Microsoft.Network/virtualNetworks/subnets', parameters('virtualNetworkName'), variables('subnet1Name'))]",
     "vmSize": "Standard_D2s_v3",
     "imagePublisher": "Canonical",
